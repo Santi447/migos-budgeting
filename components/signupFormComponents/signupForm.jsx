@@ -16,20 +16,33 @@ const signupSchema = Yup.object({
 });
 export default function SignupForm() {
   return (
-    <div className="flex w-full max-w-md flex-col items-center gap-6 rounded-lg border-2 border-gray-300 bg-white p-8 shadow-lg">
-      <h2>Create an Account</h2>
-      <p>Begin your journey towords financial harmony.</p>
-      <div className="flex flex-col gap-4">
-        <button type="button" form="signupForm">
+    <div className="flex w-full max-w-[430px] flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
+      <h2 className="text-[24px] font-extrabold leading-tight text-[#64463D]">
+        Create your Account
+      </h2>
+      <p className="-mt-2 text-[12px] leading-5">
+        Begin your journey towards financial harmony.
+      </p>
+      <div className="flex w-full flex-col gap-3">
+        <button
+          type="button"
+          form="signupForm"
+          className="h-11 rounded-full border border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-[#111111] shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
+        >
           Continue with Google
         </button>
-        <button type="button" form="signupForm">
+        <button
+          type="button"
+          form="signupForm"
+          className="h-11 rounded-full border border-[#ece7e4] bg-black px-4 text-[13px] font-semibold text-white shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
+        >
           Continue with GitHub
         </button>
       </div>
-      <p>OR WITH EMAIL</p>
+      <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
+        OR WITH EMAIL
+      </p>
       <Formik
-        className="border-2 border-gray-300"
         initialValues={{
           email: "",
           password: "",
@@ -50,11 +63,11 @@ export default function SignupForm() {
           <Form
             form="signupForm"
             onSubmit={handleSubmit}
-            className="flex  gap-4 border-2 border-gray-300 flex-col"
+            className="flex flex-col gap-3"
           >
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700"
+              className="text-[12px] font-bold text-[#51443A]"
             >
               Email Address
             </label>
@@ -65,14 +78,16 @@ export default function SignupForm() {
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 h-11 rounded-lg border border-[#e6ddd9] bg-[#E4E2E1] px-4 text-[13px] text-[#111111] placeholder:text-[#9A8B85] focus:border-[#7E5D54] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/25"
             />
             {errors.email && touched.email ? (
-              <div className="text-red-500">{errors.email}</div>
+              <div className="-mt-1 text-[12px] font-medium text-red-600">
+                {errors.email}
+              </div>
             ) : null}
             <label
               htmlFor="password"
-              className="text-sm font-medium text-gray-700"
+              className="text-[12px] font-bold text-[#51443A]"
             >
               Password
             </label>
@@ -83,15 +98,17 @@ export default function SignupForm() {
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 h-11 rounded-lg border border-[#e6ddd9] bg-[#E4E2E1] px-4 text-[13px] text-[#111111] placeholder:text-[#9A8B85] focus:border-[#7E5D54] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/25"
             />
             {errors.password && touched.password ? (
-              <div className="text-red-500">{errors.password}</div>
+              <div className="-mt-1 text-[12px] font-medium text-red-600">
+                {errors.password}
+              </div>
             ) : null}
 
             <label
               htmlFor="confirmPassword"
-              className="text-sm font-medium text-gray-700"
+              className="text-[12px] font-bold text-[#51443A]"
             >
               Confirm Password
             </label>
@@ -103,25 +120,32 @@ export default function SignupForm() {
               value={values.confirmPassword}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`mt-1 h-11 rounded-lg border bg-[#E4E2E1] border-[#e6ddd9] px-4 text-[13px] text-[#111111] placeholder:text-[#9A8B85] focus:border-[#7E5D54] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/25`}
             />
             {errors.confirmPassword && touched.confirmPassword ? (
-              <div className="text-red-500">{errors.confirmPassword}</div>
+              <div className="-mt-1 text-[12px] font-medium text-red-600">
+                {errors.confirmPassword}
+              </div>
             ) : null}
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
               Register
             </button>
           </Form>
         )}
       </Formik>
-      <p>
+      <p className="flex justify-center gap-1 text-center text-[12px] text-[#51443A]">
         Already have an account?
-        <Link href="/login" className="text-blue-500 hover:text-blue-700">Login</Link>
+        <Link
+          href="/login"
+          className="font-bold text-[#64463D] hover:text-[#7E5D54]"
+        >
+          Login
+        </Link>
       </p>
     </div>
   );
