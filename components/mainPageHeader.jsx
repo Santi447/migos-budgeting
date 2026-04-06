@@ -27,7 +27,7 @@ export default function MainPageHeader() {
 
           <Link
             href="/signUp"
-            className="font- flex h-10 w-25 items-center justify-center rounded-lg bg-[#7a5a4f] px-5 py-2 text-[13px] font-semibold text-white shadow-[0_3px_8px_rgba(0,0,0,0.18)] transition-colors hover:bg-[#6f5148] active:scale-[0.98]"
+            className="font-manrope flex h-10 w-25 items-center justify-center rounded-lg bg-[#7a5a4f] px-5 py-2 text-[13px] font-semibold text-white shadow-[0_3px_8px_rgba(0,0,0,0.18)] transition-colors hover:bg-[#6f5148] active:scale-[0.98]"
           >
             Sign Up
           </Link>
