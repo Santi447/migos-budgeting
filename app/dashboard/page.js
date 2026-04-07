@@ -1,5 +1,16 @@
 import DashboardHeader from "../../components/dashboardComponents/dashboardHeader";
 import SummaryCardSection from "@/components/dashboardComponents/summaryCardSection";
+import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
+const sampleExpenses = [
+  {
+    id: 1,
+    icon: "🍔",
+    title: "Lunch",
+    category: "Food",
+    time: "12:00 PM",
+    amount: 15.00
+  }
+];
 export default function Page(){
   return(
     <main>
@@ -13,6 +24,7 @@ export default function Page(){
       </p>
       </div>
       <SummaryCardSection />
+      <DailyExpenseList expenses={sampleExpenses} date="Today" />
     </main>
   );
 }
