@@ -5,7 +5,7 @@ export default function Dashboard() {
     <div className="w-full bg-[#fbf9f8]">
       <nav className="flex h-[54px] w-full items-center justify-between px-8">
         <div className="flex items-center gap-8">
-          <h1 className="font-sans font-extrabold text-3xl font-bold text-[#64463D]">
+          <h1 className="font-sans font-extrabold text-2xl font-bold text-[#64463D]">
             Migo&apos;s Budgeting
           </h1>
 
