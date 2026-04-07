@@ -14,8 +14,10 @@ const sampleExpenses = [
 export default function DailyExpenseList({ expenses, date }) {
   return (
     <div>
-      <h2>Daily Expenses</h2>
+      <div className="flex flex-row">
+      <h2 className="flex-1">Daily Expenses</h2>
       <span>{date}</span>
+      </div>
       <ul>
         {expenses.map((expense) => (
           <DailyExpenseItem key={expense.id} {...expense} />

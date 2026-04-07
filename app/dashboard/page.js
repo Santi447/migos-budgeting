@@ -11,10 +11,18 @@ const sampleExpenses = [
     time: "12:00 PM",
     amount: 15.0,
   },
+  {
+    id: 2,
+    icon: "☕",
+    title: "Coffee",
+    category: "Beverage",
+    time: "3:00 PM",
+    amount: 4.5,
+  }
 ];
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col border-2">
+    <main className="flex min-h-screen flex-col border-2 bg-[#FCF9F8]">
       <div className="border-2">
         <DashboardHeader />
       </div>
@@ -39,7 +47,7 @@ export default function Page() {
         </div>
 
         <div className="min-w-0 flex-1 border-2 p-4">
-          <DailyExpenseList expenses={sampleExpenses} date="Today" />
+          <DailyExpenseList expenses={sampleExpenses} date="MAR 31, 2026" />
         </div>
       </section>
     </main>
