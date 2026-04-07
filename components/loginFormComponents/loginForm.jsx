@@ -9,44 +9,21 @@ const signupSchema = Yup.object({
     .required("Email is Required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
-    .required("Password is Required"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please confirm your password"),
+    .required("Password is Required")
 });
 export default function SignupForm() {
   return (
     <div className="flex w-full max-w-[430px] flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
-      <h2 className="text-[24px] font-extrabold leading-tight text-[#64463D]">
-        Create your Account
+      <h2 className="text-4xl font-extrabold leading-tight text-[#64463D]">
+        Welcome Back
       </h2>
-      <p className="-mt-2 text-[12px] leading-5">
-        Begin your journey towards financial harmony.
-      </p>
-      <div className="flex w-full flex-col gap-3">
-        <button
-          type="button"
-          form="signupForm"
-          className="h-11 rounded-full border border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-[#111111] shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
-        >
-          Continue with Google
-        </button>
-        <button
-          type="button"
-          form="signupForm"
-          className="h-11 rounded-full border border-[#ece7e4] bg-black px-4 text-[13px] font-semibold text-white shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
-        >
-          Continue with GitHub
-        </button>
-      </div>
-      <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
-        OR WITH EMAIL
+      <p className="-mt-2 leading-5">
+        Log in to manage your daily budget
       </p>
       <Formik
         initialValues={{
           email: "",
           password: "",
-          confirmPassword: "",
         }}
         validationSchema={signupSchema}
         onSubmit={(values, { setSubmitting, setStatus }) => {}}
@@ -105,46 +82,43 @@ export default function SignupForm() {
                 {errors.password}
               </div>
             ) : null}
-
-            <label
-              htmlFor="confirmPassword"
-              className="text-[12px] font-bold text-[#51443A]"
-            >
-              Confirm Password
-            </label>
-
-            <Field
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={values.confirmPassword}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={`mt-1 h-11 rounded-lg border bg-[#E4E2E1] border-[#e6ddd9] px-4 text-[13px] text-[#111111] placeholder:text-[#9A8B85] focus:border-[#7E5D54] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/25`}
-            />
-            {errors.confirmPassword && touched.confirmPassword ? (
-              <div className="-mt-1 text-[12px] font-medium text-red-600">
-                {errors.confirmPassword}
-              </div>
-            ) : null}
-
             <button
               type="submit"
               disabled={isSubmitting}
               className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Register
+              Login
+          
             </button>
+              <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
+                OR CONTINUE WITH
+              </p>
           </Form>
         )}
       </Formik>
+        <div className="flex flex-row justify-center gap-3">
+        <button
+          type="button"
+          form="signupForm"
+          className="h-10 rounded-xl border w-full border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-[#111111] shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
+        >
+          Google
+        </button>
+        <button
+          type="button"
+          form="signupForm"
+          className="h-10 rounded-xl border w-full  border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-black shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
+        >
+          GitHub
+        </button>
+      </div>
       <p className="flex justify-center gap-1 text-center text-[12px] text-[#51443A]">
-        Already have an account?
+        New to Migo?
         <Link
-          href="/loginPage"
+          href="/signUp"
           className="font-bold text-[#64463D] hover:text-[#7E5D54]"
         >
-          Login
+          Create an Account
         </Link>
       </p>
     </div>

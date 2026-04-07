@@ -3,8 +3,8 @@ import HomeFooter from "@/components/homeFooter"
 import SignupFormBackground from "@/components/signupFormComponents/signupFormBackground"
 export default function Page() {
   return(
-    <main className="flex min-h-screen flex-col bg-[#fbf9f8] border-2 border-red-500">
-    <div className="flex flex-1 border-2 border-blue-500 overflow-hidden">
+    <main className="flex min-h-screen flex-col bg-[#fbf9f8]">
+    <div className="flex flex-1 overflow-hidden">
       <div className="relative flex-1 overflow-hidden">
         <SignupFormBackground />
       </div>
