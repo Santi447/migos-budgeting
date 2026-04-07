@@ -1,6 +1,7 @@
 import DashboardHeader from "../../components/dashboardComponents/dashboardHeader";
 import SummaryCardSection from "@/components/dashboardComponents/summaryCardSection";
 import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
+import DailyExpenseForm from "@/components/dashboardComponents/reportExpenseForm";
 
 const sampleExpenses = [
   {
@@ -42,8 +43,7 @@ export default function Page() {
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 border-2 p-2 lg:flex-row lg:items-start">
         <div className="w-full border-2 p-4 lg:max-w-md">
-          <h3>Record Expense</h3>
-          <p className="mt-2">Form section coming next.</p>
+          <DailyExpenseForm />
         </div>
 
         <div className="min-w-0 flex-1 border-2 p-4">
