@@ -42,7 +42,8 @@ export default function Page() {
       </div>
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 border-2 p-2 lg:flex-row lg:items-start">
-        <div className="w-full border-2 p-4 lg:max-w-md">
+        <div className="lg:max-w-md">
+
           <DailyExpenseForm />
         </div>
 

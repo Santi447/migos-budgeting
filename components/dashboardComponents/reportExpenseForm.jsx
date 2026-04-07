@@ -15,7 +15,7 @@ const addExpenseSchema = Yup.object({
 });
 export default function DailyExpenseForm() {
   return (
-    <div className="flex w-full max-w-full flex-col rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
+    <div className="flex max-w-full flex-col rounded-lg bg-[#F6F3F2] px-8 py-10 font-sans text-[#51443A] ">
       <Formik
         initialValues={{
           description: "",
@@ -122,9 +122,9 @@ export default function DailyExpenseForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
+              className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Add Expense
+              ADD EXPENSE
             </button>
           </Form>
         )}
