@@ -2,6 +2,8 @@
 import * as Yup from "yup";
 import { Formik, Field, Form } from "formik";
 import Link from "next/link";
+import { useUserAuth } from "../../context/AuthContext";
+import { useState } from "react";
 
 const signupSchema = Yup.object({
   email: Yup.string()
@@ -12,6 +14,23 @@ const signupSchema = Yup.object({
     .required("Password is Required"),
 });
 export default function SignupForm() {
+  const { signinginWithEmailAndPassword } = useUserAuth();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+    async function handleLogin(email, password) {
+    try {
+      setLoading(true);
+      setError(null);
+        await signinginWithEmailAndPassword(email, password);
+        setSuccess(true);
+    } catch (error) {
+      setError(error.message);
+    } 
+    finally{
+      setLoading(false);
+    }
+  }
   return (
     <div className="flex w-full max-w-[430px] flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
       <h2 className="text-4xl font-extrabold leading-tight text-[#64463D]">
@@ -24,7 +43,9 @@ export default function SignupForm() {
           password: "",
         }}
         validationSchema={signupSchema}
-        onSubmit={(values, { setSubmitting, setStatus }) => {}}
+        onSubmit={async(values) => {
+          await handleLogin(values.email, values.password);
+        }}
       >
         {({
           values,
@@ -85,8 +106,12 @@ export default function SignupForm() {
               disabled={isSubmitting}
               className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Login
+              {loading ? "Logging In..." : "Login"}
             </button>
+             {error && <div className="text-white"> {error}</div>}
+            {success && (
+              <div className="text-white"> Signed in successfully</div>
+            )}
             <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
               OR CONTINUE WITH
             </p>
