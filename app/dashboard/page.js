@@ -36,18 +36,17 @@ export default function Page() {
           Tracking your organic financial footprint.
         </p>
       </div>
-
-      <div className="mx-8 p-2">
+      
         <SummaryCardSection />
-      </div>
+      
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 p-2 lg:flex-row lg:items-start">
-        <div className="lg:max-w-md">
+        <div className="w-full lg:w-2/5">
 
           <DailyExpenseForm />
         </div>
 
-        <div className="min-w-0 flex-1 p-4">
+        <div className=" lg:w-3/5">
           <DailyExpenseList expenses={sampleExpenses} date="MAR 31, 2026" />
         </div>
       </section>

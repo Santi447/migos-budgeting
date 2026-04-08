@@ -22,7 +22,7 @@ const data = [
 
 export default function SummaryCardSection() {
   return(
-    <div className="flex flex-row gap-4 mx-8">
+    <div className="flex flex-row gap-8 mx-10">
       <div className="flex-1">
       <SummaryCard title={data[0].title} amount={data[0].amount} reportValue={data[0].reportValue} />
       </div>

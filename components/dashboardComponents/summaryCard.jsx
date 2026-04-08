@@ -1,6 +1,6 @@
 export default function SummaryCard({ title, amount, reportValue }) {
   return (
-    <div className="flex min-h-34.5 flex-col justify-between rounded-xl bg-[#f4f2f1] p-5 hover:shadow-lg transition-shadow">
+    <div className="flex min-h-40 flex-col justify-between rounded-xl bg-[#f4f2f1] p-5 hover:shadow-lg transition-shadow">
       <div className="flex flex-col gap-2">
         <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#7a6d68]">
           {title}
