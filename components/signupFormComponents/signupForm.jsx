@@ -2,21 +2,43 @@
 import * as Yup from "yup";
 import { Formik, Field, Form } from "formik";
 import Link from "next/link";
+import { useState } from "react";
+import { useUserAuth } from "../../context/AuthContext";
 
 const signupSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is Required"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
+    .min(6, "Password must be at least 6 characters")
     .required("Password is Required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please confirm your password"),
 });
+
 export default function SignupForm() {
+  const { signUpWithEmailAndPassword } = useUserAuth();
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleSignUp(email, password) {
+    try {
+      setLoading(true);
+      setError(null);
+      await signUpWithEmailAndPassword(email, password);
+      setSuccess(true);
+    } catch (error) {
+      setError(error.message);
+      setSuccess(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="flex w-full max-w-[430px] flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
+    <div className="flex w-full max-w-107.5 flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
       <h2 className="text-[24px] font-extrabold leading-tight text-[#64463D]">
         Create your Account
       </h2>
@@ -49,7 +71,9 @@ export default function SignupForm() {
           confirmPassword: "",
         }}
         validationSchema={signupSchema}
-        onSubmit={(values, { setSubmitting, setStatus }) => {}}
+        onSubmit={async (values) => {
+          await handleSignUp(values.email, values.password);
+        }}
       >
         {({
           values,
@@ -127,14 +151,17 @@ export default function SignupForm() {
                 {errors.confirmPassword}
               </div>
             ) : null}
-
             <button
               type="submit"
               disabled={isSubmitting}
               className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Register
+              {loading ? "Signing Up..." : "REGISTER"}
             </button>
+            {error && <div className="text-white"> {error}</div>}
+            {success && (
+              <div className="text-white"> Signed up successfully</div>
+            )}
           </Form>
         )}
       </Formik>

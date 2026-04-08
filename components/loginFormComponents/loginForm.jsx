@@ -8,8 +8,8 @@ const signupSchema = Yup.object({
     .email("Invalid email address")
     .required("Email is Required"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is Required")
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is Required"),
 });
 export default function SignupForm() {
   return (
@@ -17,9 +17,7 @@ export default function SignupForm() {
       <h2 className="text-4xl font-extrabold leading-tight text-[#64463D]">
         Welcome Back
       </h2>
-      <p className="-mt-2 leading-5">
-        Log in to manage your daily budget
-      </p>
+      <p className="-mt-2 leading-5">Log in to manage your daily budget</p>
       <Formik
         initialValues={{
           email: "",
@@ -88,15 +86,14 @@ export default function SignupForm() {
               className="mt-2 h-11 rounded-full bg-[#7E5D54] px-4 text-[12px] font-extrabold uppercase text-white shadow-[0_6px_14px_rgba(100,70,61,0.22)] transition-colors hover:bg-[#6f5148] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/35 disabled:cursor-not-allowed disabled:opacity-70"
             >
               Login
-          
             </button>
-              <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
-                OR CONTINUE WITH
-              </p>
+            <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
+              OR CONTINUE WITH
+            </p>
           </Form>
         )}
       </Formik>
-        <div className="flex flex-row justify-center gap-3">
+      <div className="flex flex-row justify-center gap-3">
         <button
           type="button"
           form="signupForm"
