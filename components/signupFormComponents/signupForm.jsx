@@ -18,7 +18,7 @@ const signupSchema = Yup.object({
 });
 
 export default function SignupForm() {
-  const { signUpWithEmailAndPassword } = useUserAuth();
+  const { signUpWithEmailAndPassword, googleSignIn, gitHubSignIn } = useUserAuth();
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,6 +36,33 @@ export default function SignupForm() {
       setLoading(false);
     }
   }
+    async function handleGitHubLogin() {
+    try {
+      setLoading(true);
+      setError(null);
+      await gitHubSignIn();
+      setSuccess(true);
+      router.push("/dashboard");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      setLoading(true);
+      setError(null);
+      await googleSignIn();
+      setSuccess(true);
+      router.push("/dashboard");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex w-full max-w-107.5 flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
@@ -49,12 +76,14 @@ export default function SignupForm() {
         <button
           type="button"
           form="signupForm"
+          onClick={handleGoogleLogin}
           className="h-11 rounded-full border border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-[#111111] shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
         >
           Continue with Google
         </button>
         <button
           type="button"
+          onClick={gitHubSignIn}
           form="signupForm"
           className="h-11 rounded-full border border-[#ece7e4] bg-black px-4 text-[13px] font-semibold text-white shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
         >

@@ -1,7 +1,9 @@
+"use client";
 import DashboardHeader from "../../components/dashboardComponents/dashboardHeader";
 import SummaryCardSection from "@/components/dashboardComponents/summaryCardSection";
 import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
 import DailyExpenseForm from "@/components/dashboardComponents/reportExpenseForm";
+import { useUserAuth } from "@/context/AuthContext";
 
 const sampleExpenses = [
   {
@@ -22,6 +24,16 @@ const sampleExpenses = [
   }
 ];
 export default function Page() {
+  const { user } = useUserAuth();
+  if (!user) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center bg-[#FCF9F8]">
+        <h1 className="text-2xl font-bold text-[#64463D]">
+          Please log in to access your dashboard.
+        </h1>
+      </main>
+    );
+  }
   return (
     <main className="flex min-h-screen flex-col bg-[#FCF9F8]">
       <div>
