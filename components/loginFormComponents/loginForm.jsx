@@ -4,6 +4,7 @@ import { Formik, Field, Form } from "formik";
 import Link from "next/link";
 import { useUserAuth } from "../../context/AuthContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const signupSchema = Yup.object({
   email: Yup.string()
@@ -14,7 +15,8 @@ const signupSchema = Yup.object({
     .required("Password is Required"),
 });
 export default function SignupForm() {
-  const { signinginWithEmailAndPassword } = useUserAuth();
+  const { signinginWithEmailAndPassword, gitHubSignIn} = useUserAuth();
+  const router = useRouter();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,6 +26,7 @@ export default function SignupForm() {
       setError(null);
         await signinginWithEmailAndPassword(email, password);
         setSuccess(true);
+        router.push("/dashboard");
     } catch (error) {
       setError(error.message);
     } 
@@ -31,6 +34,22 @@ export default function SignupForm() {
       setLoading(false);
     }
   }
+
+  async function handleGitHubLogin() {
+    try {
+      setLoading(true);
+      setError(null);
+      await gitHubSignIn();
+      setSuccess(true);
+      router.push("/dashboard");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   return (
     <div className="flex w-full max-w-[430px] flex-col items-stretch gap-5 rounded-lg bg-[#fbf9f8] px-8 py-10 font-sans text-[#51443A]">
       <h2 className="text-4xl font-extrabold leading-tight text-[#64463D]">
@@ -129,6 +148,7 @@ export default function SignupForm() {
         <button
           type="button"
           form="signupForm"
+          onClick={handleGitHubLogin}
           className="h-10 rounded-xl border w-full  border-[#ece7e4] bg-white px-4 text-[13px] font-semibold text-black shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
         >
           GitHub
