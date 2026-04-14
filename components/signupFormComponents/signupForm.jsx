@@ -4,6 +4,8 @@ import { Formik, Field, Form } from "formik";
 import Link from "next/link";
 import { useState } from "react";
 import { useUserAuth } from "../../context/AuthContext";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../utils/firebaseConfig";
 
 const signupSchema = Yup.object({
   email: Yup.string()
@@ -23,11 +25,29 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  async function createUserDocument(user) {
+    const userDocRef = doc(db, "users", user.uid);
+    await setDoc(userDocRef, {
+      userId: user.uid,
+      email: user.email,
+      createdAt: serverTimestamp(),
+    });
+    const today = new Date().toISOString().split("T")[0];
+
+    await setDoc(doc(db, "users", user.uid, "dailyBudgets", today), {
+      date: today,
+      totalSpent: 0,
+      totalBudget: 0,
+      createdAt: serverTimestamp(),
+    });
+  }
+
   async function handleSignUp(email, password) {
     try {
       setLoading(true);
       setError(null);
-      await signUpWithEmailAndPassword(email, password);
+      const userCredential = await signUpWithEmailAndPassword(email, password);
+      await createUserDocument(userCredential.user);
       setSuccess(true);
     } catch (error) {
       setError(error.message);

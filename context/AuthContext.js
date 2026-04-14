@@ -12,6 +12,8 @@ import {
 } from "firebase/auth";
 // import { doc, setDoc } from "firebase/firestore";
 import { auth } from "../utils/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../utils/firebaseConfig";
 
 
 const AuthContext = createContext();
