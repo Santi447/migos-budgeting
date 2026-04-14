@@ -76,7 +76,7 @@ export default function Page() {
       </div>
 
       <SummaryCardSection
-        remainingAmount={paresedDailyBudgetData?.remainingAmount || "0"}
+        remainingAmount={paresedDailyBudgetData?.remainingBudget || "0"}
         totalBudget={paresedDailyBudgetData?.totalBudget || "0"}
         totalSpent={paresedDailyBudgetData?.totalSpent || "0"}
       />
