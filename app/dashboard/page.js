@@ -4,6 +4,22 @@ import SummaryCardSection from "@/components/dashboardComponents/summaryCardSect
 import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
 import DailyExpenseForm from "@/components/dashboardComponents/reportExpenseForm";
 import { useUserAuth } from "@/context/AuthContext";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+
+function normalizeDate(value) {
+  if (!value) return null;
+
+  if (typeof value.toDate === "function") {
+    return value.toDate();
+  }
+
+  if (value instanceof Date) {
+    return value;
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
 
 const sampleExpenses = [
   {
@@ -21,10 +37,20 @@ const sampleExpenses = [
     category: "Beverage",
     time: "3:00 PM",
     amount: 4.5,
-  }
+  },
 ];
 export default function Page() {
   const { user } = useUserAuth();
+  const dailyBudgetPath = user ? ["users", user.uid, "dailyBudgets"] : null;
+  const {
+    data: dailyBudgetData,
+    isLoading,
+    error,
+  } = useFirestoreCollection(dailyBudgetPath);
+  const paresedDailyBudgetData = dailyBudgetData[0];
+
+  console.log(paresedDailyBudgetData);
+
   if (!user) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center bg-[#FCF9F8]">
@@ -48,13 +74,15 @@ export default function Page() {
           Tracking your organic financial footprint.
         </p>
       </div>
-      
-        <SummaryCardSection />
-      
+
+      <SummaryCardSection
+        remainingAmount={paresedDailyBudgetData?.remainingAmount || "0"}
+        totalBudget={paresedDailyBudgetData?.totalBudget || "0"}
+        totalSpent={paresedDailyBudgetData?.totalSpent || "0"}
+      />
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 p-2 lg:flex-row lg:items-start">
         <div className="w-full lg:w-2/5">
-
           <DailyExpenseForm />
         </div>
 

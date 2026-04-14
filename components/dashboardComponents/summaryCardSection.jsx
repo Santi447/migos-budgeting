@@ -20,17 +20,33 @@ const data = [
   },
 ];
 
-export default function SummaryCardSection() {
-  return(
+export default function SummaryCardSection({
+  remainingAmount,
+  totalBudget,
+  totalSpent,
+}) {
+  return (
     <div className="flex flex-row gap-8 mx-10">
       <div className="flex-1">
-      <SummaryCard title={data[0].title} amount={data[0].amount} reportValue={data[0].reportValue} />
+        <SummaryCard
+          title={data[0].title}
+          amount={totalBudget}
+          reportValue={data[0].reportValue}
+        />
       </div>
       <div className="flex-1">
-      <SummaryCard title={data[1].title} amount={data[1].amount} reportValue={data[1].reportValue} />
+        <SummaryCard
+          title={data[1].title}
+          amount={totalSpent}
+          reportValue={data[1].reportValue}
+        />
       </div>
       <div className="flex-1">
-      <SummaryCard title={data[2].title} amount={data[2].amount} reportValue={data[2].reportValue} />
+        <SummaryCard
+          title={data[2].title}
+          amount={remainingAmount}
+          reportValue={data[2].reportValue}
+        />
       </div>
     </div>
   );
