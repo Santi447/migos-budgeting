@@ -12,6 +12,8 @@ const sampleExpenses = [
 ];
 
 export default function DailyExpenseList({ expenses, date }) {
+  // const safeExpenses = Array.isArray(expenses) ? expenses : [];
+
   return (
     <div>
       <div className="flex flex-row mb-6">
@@ -19,7 +21,7 @@ export default function DailyExpenseList({ expenses, date }) {
       <span className="font-sans font-bold text-sm ">{date}</span>
       </div>
       <ul>
-        {expenses.map((expense) => (
+        {expenses?.map((expense) => (
           <DailyExpenseItem key={expense.id} {...expense} />
         ))}
       </ul>

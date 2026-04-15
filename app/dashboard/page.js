@@ -1,55 +1,65 @@
 "use client";
+import { useEffect, useRef } from "react";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import DashboardHeader from "../../components/dashboardComponents/dashboardHeader";
 import SummaryCardSection from "@/components/dashboardComponents/summaryCardSection";
 import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
 import DailyExpenseForm from "@/components/dashboardComponents/reportExpenseForm";
 import { useUserAuth } from "@/context/AuthContext";
-import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import { useFirestoreDocument } from "../../hooks/useFirestoreDocument";
+import { db } from "@/utils/firebaseConfig";
+function getLocalDateString() {
+  const now = new Date();
+  now.setDate(now.getDate());
 
-function normalizeDate(value) {
-  if (!value) return null;
-
-  if (typeof value.toDate === "function") {
-    return value.toDate();
-  }
-
-  if (value instanceof Date) {
-    return value;
-  }
-
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
-
-const sampleExpenses = [
-  {
-    id: 1,
-    icon: "🍔",
-    title: "Lunch",
-    category: "Food",
-    time: "12:00 PM",
-    amount: 15.0,
-  },
-  {
-    id: 2,
-    icon: "☕",
-    title: "Coffee",
-    category: "Beverage",
-    time: "3:00 PM",
-    amount: 4.5,
-  },
-];
 export default function Page() {
   const { user } = useUserAuth();
-  const dailyBudgetPath = user ? ["users", user.uid, "dailyBudgets"] : null;
+  const hasCreatedTodayRef = useRef(false);
+  const today = getLocalDateString();
+  const todayPath = user ? ["users", user.uid, "dailyBudgets", today] : null;
+
   const {
-    data: dailyBudgetData,
+    data: parsedDailyBudgetData,
     isLoading,
     error,
-  } = useFirestoreCollection(dailyBudgetPath);
-  const paresedDailyBudgetData = dailyBudgetData[0];
+  } = useFirestoreDocument(todayPath);
 
-  console.log(paresedDailyBudgetData);
+  useEffect(() => {
+    if (!user || isLoading) return;
+    if (parsedDailyBudgetData !== null) return;
+    if (hasCreatedTodayRef.current) return;
+
+    hasCreatedTodayRef.current = true;
+
+    const docRef = doc(db, "users", user.uid, "dailyBudgets", today);
+    setDoc(docRef, {
+      date: today,
+      totalBudget: 200,
+      totalSpent: 0,
+      remainingBudget: 200,
+      expnenseList: [],
+      createdAt: serverTimestamp(),
+    }).catch((createError) => {
+      hasCreatedTodayRef.current = false;
+      console.error("Error creating daily budget document:", createError);
+    });
+  }, [user, isLoading, parsedDailyBudgetData, today]);
+
+  // const paresedDailyBudgetData = dailyBudgetData[0];
+  const dailyExpenses =
+    parsedDailyBudgetData?.expnenseList?.map((expense, index) => ({
+      ...expense,
+      id: expense.id ?? expense.Id ?? index,
+    })) ?? [];
+
+  if (error) {
+    console.error("Failed to load daily budget document:", error);
+  }
 
   if (!user) {
     return (
@@ -76,9 +86,9 @@ export default function Page() {
       </div>
 
       <SummaryCardSection
-        remainingAmount={paresedDailyBudgetData?.remainingBudget || "0"}
-        totalBudget={paresedDailyBudgetData?.totalBudget || "0"}
-        totalSpent={paresedDailyBudgetData?.totalSpent || "0"}
+        remainingAmount={parsedDailyBudgetData?.remainingBudget || "0"}
+        totalBudget={parsedDailyBudgetData?.totalBudget || "0"}
+        totalSpent={parsedDailyBudgetData?.totalSpent || "0"}
       />
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 p-2 lg:flex-row lg:items-start">
@@ -87,7 +97,10 @@ export default function Page() {
         </div>
 
         <div className=" lg:w-3/5">
-          <DailyExpenseList expenses={sampleExpenses} date="MAR 31, 2026" />
+          <DailyExpenseList
+            expenses={dailyExpenses}
+            date={parsedDailyBudgetData?.date}
+          />
         </div>
       </section>
     </main>

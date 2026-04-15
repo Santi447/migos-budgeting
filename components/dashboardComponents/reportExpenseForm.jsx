@@ -1,6 +1,10 @@
 "use client";
 import * as Yup from "yup";
 import { Formik, Field, Form } from "formik";
+import { doc, updateDoc, arrayUnion, Timestamp, increment } from "firebase/firestore";
+import { db } from "../../utils/firebaseConfig";
+import { useUserAuth } from "../../context/AuthContext";
+
 const addExpenseSchema = Yup.object({
   description: Yup.string().required("Description is required"),
   amount: Yup.number()
@@ -13,7 +17,49 @@ const addExpenseSchema = Yup.object({
     )
     .required("Category is required"),
 });
+
+async function handleExpenseSubmit(values, userId, dailyBudgetId) {
+  try {
+    // Here you would typically send the expense data to your backend or Firebase
+    console.log("Expense submitted:", values);
+    const docRef = doc(db, "users", userId, "dailyBudgets", dailyBudgetId); // Replace with actual user ID and budget ID
+    const amountNum = Number(values.amount);
+
+    if (Number.isNaN(amountNum)) {
+      throw new Error("Invalid amount value");
+    }
+
+    const newExpense = {
+      id: Date.now().toString(),
+      title: values.description,
+      amount: amountNum,
+      category: values.category,
+      icon: "💸",
+      time: Timestamp.now(),
+    };
+
+    await updateDoc(docRef, {
+      expnenseList: arrayUnion(newExpense),
+      totalSpent: increment(amountNum), // Update this based on your data structure
+      remainingBudget: increment(-amountNum), // Update this based on your data structure
+    });
+  } catch (error) {
+    console.error("Error submitting expense:", error);
+  }
+}
+function getLocalDateString() {
+  const now = new Date();
+  now.setDate(now.getDate());
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 export default function DailyExpenseForm() {
+  const { user } = useUserAuth();
+  const dailyBudgetId = getLocalDateString(); // Replace with actual daily budget ID
+
   return (
     <div className="flex max-w-full flex-col rounded-lg bg-[#F6F3F2] px-8 py-10 font-sans text-[#51443A] ">
       <Formik
@@ -23,7 +69,9 @@ export default function DailyExpenseForm() {
           category: "",
         }}
         validationSchema={addExpenseSchema}
-        onSubmit={(values, { setSubmitting, setStatus }) => {}}
+        onSubmit={async (values, { setSubmitting, setStatus }) => {
+          await handleExpenseSubmit(values, user.uid, dailyBudgetId);
+        }}
       >
         {({
           values,
