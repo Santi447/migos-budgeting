@@ -86,9 +86,22 @@ export default function Page() {
       </div>
 
       <SummaryCardSection
-        remainingAmount={parsedDailyBudgetData?.remainingBudget || "0"}
-        totalBudget={parsedDailyBudgetData?.totalBudget || "0"}
-        totalSpent={parsedDailyBudgetData?.totalSpent || "0"}
+        remainingAmount={parsedDailyBudgetData?.remainingBudget.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          }) || "0"}
+        totalBudget={
+          parsedDailyBudgetData?.totalBudget.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          }) || "0"
+        }
+        totalSpent={
+          parsedDailyBudgetData?.totalSpent.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          }) || "0"
+        }
       />
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 p-2 lg:flex-row lg:items-start">
