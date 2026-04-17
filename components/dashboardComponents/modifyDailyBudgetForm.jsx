@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useUserAuth } from "../../context/AuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc,getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebaseConfig";
 
 const modifyBudgetSchema = Yup.object().shape({
@@ -18,9 +18,11 @@ async function handleModifyDailyBudget(values, userId, dailyBudgetId) {
     if (Number.isNaN(amountNum)) {
       throw new Error("Invalid total budget value");
     }
-
+   const snapshot = await getDoc(docRef);
+  const totalSpent = snapshot.exists() ? Number(snapshot.data().totalSpent ?? 0) : 0;
     await updateDoc(docRef, {
       totalBudget: amountNum,
+      remainingBudget: amountNum - totalSpent, // You may want to adjust this based on your data structure
     });
   } catch (error) {
     console.error("Error updating total budget:", error);
