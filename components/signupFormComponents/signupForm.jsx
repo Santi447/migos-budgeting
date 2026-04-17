@@ -38,6 +38,8 @@ export default function SignupForm() {
       date: today,
       totalSpent: 0,
       totalBudget: 0,
+      remainingBudget: 0,
+      expnenseList: [],
       createdAt: serverTimestamp(),
     });
   }

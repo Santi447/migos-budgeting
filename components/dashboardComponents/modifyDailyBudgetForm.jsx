@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useUserAuth } from "../../context/AuthContext";
-import { doc, updateDoc,getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebaseConfig";
 
 const modifyBudgetSchema = Yup.object().shape({
@@ -20,10 +20,14 @@ async function handleModifyDailyBudget(values, userId, dailyBudgetId) {
     }
    const snapshot = await getDoc(docRef);
   const totalSpent = snapshot.exists() ? Number(snapshot.data().totalSpent ?? 0) : 0;
-    await updateDoc(docRef, {
+    await setDoc(
+      docRef,
+      {
       totalBudget: amountNum,
       remainingBudget: amountNum - totalSpent, // You may want to adjust this based on your data structure
-    });
+      },
+      { merge: true },
+    );
   } catch (error) {
     console.error("Error updating total budget:", error);
   }
@@ -77,7 +81,7 @@ export default function ModifyDailyBudgetForm({ onClose }) {
                 Modify Daily Budget
               </h2>
             </div>
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+
               <div className="flex flex-col">
                 <label
                   htmlFor="amount"
@@ -99,7 +103,7 @@ export default function ModifyDailyBudgetForm({ onClose }) {
                     {errors.amount}
                   </div>
                 ) : null}
-              </div>
+              
             </div>
 
             <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-end">

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import DashboardHeader from "../../components/dashboardComponents/dashboardHeader";
 import SummaryCardSection from "@/components/dashboardComponents/summaryCardSection";
 import DailyExpenseList from "@/components/dashboardComponents/dailyExpenseList";
@@ -9,7 +9,7 @@ import { useUserAuth } from "@/context/AuthContext";
 import { useFirestoreDocument } from "../../hooks/useFirestoreDocument";
 import { db } from "@/utils/firebaseConfig";
 
-
+const DEFAULT_DAILY_BUDGET = 200;
 
 function getLocalDateString() {
   const now = new Date();
@@ -22,36 +22,84 @@ function getLocalDateString() {
 }
 export default function Page() {
   const { user } = useUserAuth();
-  const hasCreatedTodayRef = useRef(false);
+  const hasEnsuredTodayRef = useRef(false);
   const today = getLocalDateString();
   const todayPath = user ? ["users", user.uid, "dailyBudgets", today] : null;
 
   const {
     data: parsedDailyBudgetData,
-    isLoading,
     error,
   } = useFirestoreDocument(todayPath);
 
   useEffect(() => {
-    if (!user || isLoading) return;
-    if (parsedDailyBudgetData !== null) return;
-    if (hasCreatedTodayRef.current) return;
+    if (!user?.uid) {
+      hasEnsuredTodayRef.current = false;
+      return;
+    }
 
-    hasCreatedTodayRef.current = true;
+    if (hasEnsuredTodayRef.current) return;
 
+    hasEnsuredTodayRef.current = true;
     const docRef = doc(db, "users", user.uid, "dailyBudgets", today);
-    setDoc(docRef, {
-      date: today,
-      totalBudget: 200,
-      totalSpent: 0,
-      remainingBudget: 200,
-      expnenseList: [],
-      createdAt: serverTimestamp(),
-    }).catch((createError) => {
-      hasCreatedTodayRef.current = false;
-      console.error("Error creating daily budget document:", createError);
-    });
-  }, [user, isLoading, parsedDailyBudgetData, today]);
+
+    async function ensureDailyBudgetDocument() {
+      try {
+        const snapshot = await getDoc(docRef);
+
+        if (!snapshot.exists()) {
+          await setDoc(docRef, {
+            date: today,
+            totalBudget: DEFAULT_DAILY_BUDGET,
+            totalSpent: 0,
+            remainingBudget: DEFAULT_DAILY_BUDGET,
+            expnenseList: [],
+            createdAt: serverTimestamp(),
+          });
+          return;
+        }
+
+        const existingData = snapshot.data();
+        const totalBudget = Number(
+          existingData.totalBudget ?? DEFAULT_DAILY_BUDGET,
+        );
+        const totalSpent = Number(existingData.totalSpent ?? 0);
+        const missingFields = {};
+
+        if (typeof existingData.date !== "string") {
+          missingFields.date = today;
+        }
+
+        if (!Number.isFinite(Number(existingData.totalBudget))) {
+          missingFields.totalBudget = totalBudget;
+        }
+
+        if (!Number.isFinite(Number(existingData.totalSpent))) {
+          missingFields.totalSpent = totalSpent;
+        }
+
+        if (!Number.isFinite(Number(existingData.remainingBudget))) {
+          missingFields.remainingBudget = totalBudget - totalSpent;
+        }
+
+        if (!Array.isArray(existingData.expnenseList)) {
+          missingFields.expnenseList = [];
+        }
+
+        if (!existingData.createdAt) {
+          missingFields.createdAt = serverTimestamp();
+        }
+
+        if (Object.keys(missingFields).length > 0) {
+          await setDoc(docRef, missingFields, { merge: true });
+        }
+      } catch (createError) {
+        hasEnsuredTodayRef.current = false;
+        console.error("Error creating daily budget document:", createError);
+      }
+    }
+
+    ensureDailyBudgetDocument();
+  }, [today, user?.uid]);
 
   // const paresedDailyBudgetData = dailyBudgetData[0];
   const dailyExpenses =
@@ -73,6 +121,30 @@ export default function Page() {
       </main>
     );
   }
+
+  const remainingAmount = Number(
+    parsedDailyBudgetData?.remainingBudget ?? 0,
+  ).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  const totalBudget = Number(parsedDailyBudgetData?.totalBudget ?? 0).toLocaleString(
+    "en-US",
+    {
+      style: "currency",
+      currency: "USD",
+    },
+  );
+
+  const totalSpent = Number(parsedDailyBudgetData?.totalSpent ?? 0).toLocaleString(
+    "en-US",
+    {
+      style: "currency",
+      currency: "USD",
+    },
+  );
+
   return (
     <main className="flex min-h-screen flex-col bg-[#FCF9F8]">
       <div>
@@ -89,22 +161,9 @@ export default function Page() {
       </div>
 
       <SummaryCardSection
-        remainingAmount={parsedDailyBudgetData?.remainingBudget.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          }) || "0"}
-        totalBudget={
-          parsedDailyBudgetData?.totalBudget.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          }) || "0"
-        }
-        totalSpent={
-          parsedDailyBudgetData?.totalSpent.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          }) || "0"
-        }
+        remainingAmount={remainingAmount}
+        totalBudget={totalBudget}
+        totalSpent={totalSpent}
       />
 
       <section className="mx-8 mt-10 mb-8 flex flex-1 flex-col gap-6 p-2 lg:flex-row lg:items-start">
