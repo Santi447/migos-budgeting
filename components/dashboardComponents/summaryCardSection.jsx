@@ -32,7 +32,9 @@ export default function SummaryCardSection({
           title={data[0].title}
           amount={totalBudget}
           reportValue={data[0].reportValue}
+          editable
         />
+        
       </div>
       <div className="flex-1">
         <SummaryCard
