@@ -24,7 +24,7 @@ async function handleModifyDailyBudget(values, userId, dailyBudgetId) {
       docRef,
       {
       totalBudget: amountNum,
-      remainingBudget: amountNum - totalSpent, // You may want to adjust this based on your data structure
+      remainingBudget: amountNum - totalSpent,
       },
       { merge: true },
     );
@@ -44,7 +44,7 @@ function getLocalDateString() {
 export default function ModifyDailyBudgetForm({ onClose }) {
   const { user } = useUserAuth();
   const dailyBudgetId = getLocalDateString(new Date().toISOString().split("T")[0]);
-   // Replace with actual daily budget ID
+   
   return (
     <div className="flex max-w-full flex-col rounded-lg bg-[#F6F3F2] px-8 py-10 font-sans text-[#51443A] ">
       <Formik

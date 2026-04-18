@@ -1,24 +1,4 @@
 import SummaryCard from "./summaryCard";
-const data = [
-  {
-    id: 1,
-    title: "Daily Budget",
-    amount: "$120.00",
-    reportValue: "+10% from last month",
-  },
-  {
-    id: 2,
-    title: "Spent Today",
-    amount: "$45.50",
-    reportValue: "-5% from last month",
-  },
-  {
-    id: 3,
-    title: "Remaining Budget",
-    amount: "$74.50",
-    reportValue: "+15% from last month",
-  },
-];
 
 export default function SummaryCardSection({
   remainingAmount,
@@ -29,25 +9,25 @@ export default function SummaryCardSection({
     <div className="flex flex-row gap-8 mx-10">
       <div className="flex-1">
         <SummaryCard
-          title={data[0].title}
+          title={"Daily Budget"}
           amount={totalBudget}
-          reportValue={data[0].reportValue}
+          reportValue={""}
           editable
         />
         
       </div>
       <div className="flex-1">
         <SummaryCard
-          title={data[1].title}
+          title={"Spent Today"}
           amount={totalSpent}
-          reportValue={data[1].reportValue}
+          reportValue={""}
         />
       </div>
       <div className="flex-1">
         <SummaryCard
-          title={data[2].title}
+          title={"Remaining Budget"}
           amount={remainingAmount}
-          reportValue={data[2].reportValue}
+          reportValue={""}
         />
       </div>
     </div>

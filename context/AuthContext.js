@@ -10,7 +10,6 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider
 } from "firebase/auth";
-// import { doc, setDoc } from "firebase/firestore";
 import { auth } from "../utils/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../utils/firebaseConfig";
@@ -27,29 +26,17 @@ export const AuthContextProvider = ({ children }) => {
 
   async function signUpWithEmailAndPassword(email, password) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    // const userDocRef = doc(db, "Users", userCredential.user.uid);
-
-    // await setDoc(userDocRef, {
-    //   userId: userCredential.user.uid,
-    // });
-
     return userCredential;
   }
   const gitHubSignIn = async () => {
     const provider = new GithubAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
-    // const userDocRef = doc(db, "Users", userCredential.user.uid);
-
-    // await setDoc(userDocRef, {
-    //   userId: userCredential.user.uid,
-    // });
 
     return userCredential;
   };
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
-    // const userDocRef = doc(db, "Users", userCredential.user.uid);
 
     return userCredential;
   };

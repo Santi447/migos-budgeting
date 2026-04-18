@@ -105,7 +105,7 @@ export default function SignupForm() {
         </button>
         <button
           type="button"
-          onClick={gitHubSignIn}
+          onClick={handleGitHubLogin}
           form="signupForm"
           className="h-11 rounded-full border border-[#ece7e4] bg-black px-4 text-[13px] font-semibold text-white shadow-[0_1px_6px_rgba(100,70,61,0.08)] transition-colors hover:bg-[#f4efec] focus:outline-none focus:ring-2 focus:ring-[#7E5D54]/30"
         >

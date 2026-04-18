@@ -20,9 +20,7 @@ const addExpenseSchema = Yup.object({
 
 async function handleExpenseSubmit(values, userId, dailyBudgetId) {
   try {
-    // Here you would typically send the expense data to your backend or Firebase
-    console.log("Expense submitted:", values);
-    const docRef = doc(db, "users", userId, "dailyBudgets", dailyBudgetId); // Replace with actual user ID and budget ID
+    const docRef = doc(db, "users", userId, "dailyBudgets", dailyBudgetId); 
     const amountNum = Number(values.amount);
 
     if (Number.isNaN(amountNum)) {
@@ -40,8 +38,8 @@ async function handleExpenseSubmit(values, userId, dailyBudgetId) {
 
     await updateDoc(docRef, {
       expnenseList: arrayUnion(newExpense),
-      totalSpent: increment(amountNum), // Update this based on your data structure
-      remainingBudget: increment(-amountNum), // Update this based on your data structure
+      totalSpent: increment(amountNum),
+      remainingBudget: increment(-amountNum), 
     });
   } catch (error) {
     console.error("Error submitting expense:", error);
@@ -58,7 +56,7 @@ function getLocalDateString() {
 }
 export default function DailyExpenseForm() {
   const { user } = useUserAuth();
-  const dailyBudgetId = getLocalDateString(); // Replace with actual daily budget ID
+  const dailyBudgetId = getLocalDateString(); 
 
   return (
     <div className="flex max-w-full flex-col rounded-lg bg-[#F6F3F2] px-8 py-10 font-sans text-[#51443A] ">
@@ -69,8 +67,10 @@ export default function DailyExpenseForm() {
           category: "",
         }}
         validationSchema={addExpenseSchema}
-        onSubmit={async (values, { setSubmitting, setStatus }) => {
+        onSubmit={async (values, { setSubmitting, }) => {
+          setSubmitting(true);
           await handleExpenseSubmit(values, user.uid, dailyBudgetId);
+          setSubmitting(false);
         }}
       >
         {({

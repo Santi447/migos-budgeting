@@ -101,7 +101,7 @@ export default function Page() {
     ensureDailyBudgetDocument();
   }, [today, user?.uid]);
 
-  // const paresedDailyBudgetData = dailyBudgetData[0];
+
   const dailyExpenses =
     parsedDailyBudgetData?.expnenseList?.map((expense, index) => ({
       ...expense,

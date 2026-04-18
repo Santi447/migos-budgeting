@@ -1,19 +1,6 @@
 import DailyExpenseItem from "./dailyExpenseItem";
 
-const sampleExpenses = [
-  {
-    id: 1,
-    icon: "🍔",
-    title: "Lunch",
-    category: "Food",
-    time: "12:00 PM",
-    amount: 15.00
-  }
-];
-
 export default function DailyExpenseList({ expenses, date }) {
-  // const safeExpenses = Array.isArray(expenses) ? expenses : [];
-
   return (
     <div>
       <div className="flex flex-row mb-6">
