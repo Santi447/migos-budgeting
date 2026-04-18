@@ -209,9 +209,9 @@ export default function SignupForm() {
             >
               {loading ? "Signing Up..." : "REGISTER"}
             </button>
-            {error && <div className="text-white"> {error}</div>}
+            {error && <div className="text-black"> {error}</div>}
             {success && (
-              <div className="text-white"> Signed up successfully</div>
+              <div className="text-black"> Signed up successfully</div>
             )}
           </Form>
         )}

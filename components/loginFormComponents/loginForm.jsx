@@ -141,9 +141,9 @@ export default function SignupForm() {
             >
               {loading ? "Logging In..." : "Login"}
             </button>
-             {error && <div className="text-white"> {error}</div>}
+             {error && <div className="text-black"> {error}</div>}
             {success && (
-              <div className="text-white"> Signed in successfully</div>
+              <div className="text-black"> Signed in successfully</div>
             )}
             <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#8B7770] before:h-px before:flex-1 before:bg-[#e6ddd9] after:h-px after:flex-1 after:bg-[#e6ddd9]">
               OR CONTINUE WITH
